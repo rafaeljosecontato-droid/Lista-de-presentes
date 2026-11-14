@@ -11,14 +11,14 @@
     <header class="bg-amber-700 text-white shadow-md">
         <div class="max-w-4xl mx-auto px-4 py-6 text-center">
             <h1 class="text-2xl sm:text-3xl font-bold">🏡 Lista de Presentes - Rumo ao Nosso Lar</h1>
-            <p class="mt-2 text-amber-100 text-sm sm:text-base">Escolha um item para nos presentear e ganhe um <strong>Número da Sorte</strong> para concorrer a uma maravilhosa <strong>Cesta de Café da Manhã</strong>! ☕🧺</p>
+            <p class="mt-2 text-amber-100 text-sm sm:text-base">Escolha um item numerado para nos presentear e ganhe um <strong>Número da Sorte</strong> para concorrer a uma maravilhosa <strong>Cesta de Café da Manhã</strong>! ☕🧺</p>
         </div>
     </header>
 
     <main class="max-w-4xl mx-auto px-4 py-6">
         <div class="bg-white rounded-xl shadow-sm p-4 mb-6 text-center border border-amber-200">
             <h2 class="text-lg font-bold text-slate-800 mb-1">🎁 Como participar:</h2>
-            <p class="text-xs sm:text-sm text-slate-600">1. Escolha um item abaixo e clique em "Ver no Mercado Livre".<br>2. Volte aqui, clique em "Já comprei / Escolher Presente" para registrar e gerar seu cupom da sorte!</p>
+            <p class="text-xs sm:text-sm text-slate-600">1. Escolha um item numerado abaixo e clique em "Ver no Mercado Livre".<br>2. Clique em "Escolher este Presente" para preencher seus dados e enviar direto para o nosso WhatsApp!</p>
         </div>
 
         <div id="products-grid" class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-24"></div>
@@ -48,90 +48,53 @@
 
     <footer class="max-w-4xl mx-auto px-4 py-8 text-center text-xs text-slate-500">
         <p>Lista de Presentes do Novo Lar - Todos os direitos reservados.</p>
-        <button onclick="openAdminLogin()" class="mt-3 text-amber-700 hover:underline font-medium">
-            <i class="fa-solid fa-lock mr-1"></i> Área do Admin
-        </button>
     </footer>
 
-    <!-- Modal Admin -->
-    <div id="adminModal" class="fixed inset-0 bg-black/50 hidden items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-2xl max-w-lg w-full p-6 shadow-xl relative max-h-[90vh] overflow-y-auto">
-            <div class="flex justify-between items-center mb-4">
-                <h3 class="text-lg font-bold text-slate-800">Painel do Administrador</h3>
-                <button onclick="closeAdminModal()" class="text-slate-400 hover:text-slate-600"><i class="fa-solid fa-xmark text-lg"></i></button>
-            </div>
-            <div id="adminLoginView" class="space-y-4">
-                <input type="password" id="adminPasswordInput" placeholder="Senha (junho2001)" class="w-full px-3 py-2 border border-slate-300 rounded-lg text-sm">
-                <button onclick="verifyAdminPassword()" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold py-2.5 rounded-xl text-sm transition">Entrar</button>
-            </div>
-            <div id="adminDashboardView" class="hidden space-y-4">
-                <h4 class="font-bold text-sm text-slate-700">Presentes Escolhidos / Participantes:</h4>
-                <div id="admin-gifts-list" class="space-y-2 max-h-60 overflow-y-auto pr-1"></div>
-            </div>
-        </div>
-    </div>
-
     <script>
-        let products = [
-            { id: 1, name: "Item de Utilidade p/ Cozinha (Opção 1)", link: "https://meli.la/2t1VTWA", taken: false, buyer: null },
-            { id: 2, name: "Item de Utilidade p/ Cozinha (Opção 2)", link: "https://meli.la/2NGnPU4", taken: false, buyer: null },
-            { id: 3, name: "Item de Utilidade p/ Cozinha (Opção 3)", link: "https://meli.la/1CF4311", taken: false, buyer: null },
-            { id: 4, name: "Item de Utilidade p/ Cozinha (Opção 4)", link: "https://meli.la/12CFgbJ", taken: false, buyer: null },
-            { id: 5, name: "Eletro / Utensílio p/ Casa (Opção 5)", link: "https://meli.la/337B1K3", taken: false, buyer: null },
-            { id: 6, name: "Utensílio p/ Lar (Opção 6)", link: "https://meli.la/1541aS7", taken: false, buyer: null },
-            { id: 7, name: "Utensílio p/ Lar (Opção 7)", link: "https://meli.la/1rG58dD", taken: false, buyer: null },
-            { id: 8, name: "Acessório para Casa (Opção 8)", link: "https://meli.la/2DkCGR3", taken: false, buyer: null },
-            { id: 9, name: "Acessório para Casa (Opção 9)", link: "https://meli.la/1kqSqsq", taken: false, buyer: null },
-            { id: 10, name: "Acessório para Casa (Opção 10)", link: "https://meli.la/1HtSH2p", taken: false, buyer: null },
-            { id: 11, name: "Kit 4 Toalhas Fênix (Banho e Rosto)", link: "https://www.mercadolivre.com.br/kit-4-toalhas-fenix-2-banho-e-2-rosto-algodao-alta-absorcao/up/MLBU4613630022?pdp_filters=item_id%3AMLB7340159874", taken: false, buyer: null },
-            { id: 12, name: "Kit Conjunto Banheiro 6 Peças Bambu", link: "https://produto.mercadolivre.com.br/MLB-4100977231-kit-conjunto-banheiro-6-pecas-lixeira-tampa-bambu-fechada-_JM", taken: false, buyer: null },
-            { id: 13, name: "Item Organizador p/ Casa", link: "https://meli.la/25oYgmJ", taken: false, buyer: null },
-            { id: 14, name: "Assento Sanitário Oval Astra Slim", link: "https://produto.mercadolivre.com.br/MLB-2661781479-tampa-almofadado-assento-privada-oval-universal-astra-slim-_JM", taken: false, buyer: null },
-            { id: 15, name: "Torneira de Banheiro Quadrada Preta", link: "https://www.mercadolivre.com.br/torneira-de-banheiro-quadrada-quadrada-preta-com-furo-unico-pintada/up/MLBU3051393764?pdp_filters=item_id%3AMLB5306382416", taken: false, buyer: null },
-            { id: 16, name: "Utensílio Especial p/ O Lar", link: "https://meli.la/1xXqYwN", taken: false, buyer: null }
+        const products = [
+            { id: 1, name: "Item #01 - Utilidade p/ Cozinha", link: "https://meli.la/2t1VTWA" },
+            { id: 2, name: "Item #02 - Utilidade p/ Cozinha", link: "https://meli.la/2NGnPU4" },
+            { id: 3, name: "Item #03 - Utilidade p/ Cozinha", link: "https://meli.la/1CF4311" },
+            { id: 4, name: "Item #04 - Utilidade p/ Cozinha", link: "https://meli.la/12CFgbJ" },
+            { id: 5, name: "Item #05 - Eletro / Utensílio p/ Casa", link: "https://meli.la/337B1K3" },
+            { id: 6, name: "Item #06 - Utensílio p/ Lar", link: "https://meli.la/1541aS7" },
+            { id: 7, name: "Item #07 - Utensílio p/ Lar", link: "https://meli.la/1rG58dD" },
+            { id: 8, name: "Item #08 - Acessório para Casa", link: "https://meli.la/2DkCGR3" },
+            { id: 9, name: "Item #09 - Acessório para Casa", link: "https://meli.la/1kqSqsq" },
+            { id: 10, name: "Item #10 - Acessório para Casa", link: "https://meli.la/1HtSH2p" },
+            { id: 11, name: "Item #11 - Kit 4 Toalhas Fênix (Banho e Rosto)", link: "https://www.mercadolivre.com.br/kit-4-toalhas-fenix-2-banho-e-2-rosto-algodao-alta-absorcao/up/MLBU4613630022?pdp_filters=item_id%3AMLB7340159874" },
+            { id: 12, name: "Item #12 - Kit Conjunto Banheiro 6 Peças Bambu", link: "https://produto.mercadolivre.com.br/MLB-4100977231-kit-conjunto-banheiro-6-pecas-lixeira-tampa-bambu-fechada-_JM" },
+            { id: 13, name: "Item #13 - Organizador p/ Casa", link: "https://meli.la/25oYgmJ" },
+            { id: 14, name: "Item #14 - Assento Sanitário Oval Astra Slim", link: "https://produto.mercadolivre.com.br/MLB-2661781479-tampa-almofadado-assento-privada-oval-universal-astra-slim-_JM" },
+            { id: 15, name: "Item #15 - Torneira de Banheiro Quadrada Preta", link: "https://www.mercadolivre.com.br/torneira-de-banheiro-quadrada-quadrada-preta-com-furo-unico-pintada/up/MLBU3051393764?pdp_filters=item_id%3AMLB5306382416" },
+            { id: 16, name: "Item #16 - Utensílio Especial p/ O Lar", link: "https://meli.la/1xXqYwN" }
         ];
 
         let selectedProductId = null;
 
-        function loadData() {
-            const saved = localStorage.getItem('lista_presentes_rafael');
-            if(saved) {
-                try { products = JSON.parse(saved); } catch(e){}
-            }
-            renderProducts();
-        }
-
-        function saveData() {
-            localStorage.setItem('lista_presentes_rafael', JSON.stringify(products));
-        }
-
         function renderProducts() {
             const grid = document.getElementById('products-grid');
+            if (!grid) return;
             grid.innerHTML = '';
+            
             products.forEach(p => {
                 const div = document.createElement('div');
-                div.className = `p-4 rounded-xl border flex flex-col justify-between gap-3 shadow-sm ${p.taken ? 'bg-slate-100 border-slate-300 opacity-75' : 'bg-white border-slate-200'}`;
+                div.className = "p-4 rounded-xl border border-slate-200 bg-white flex flex-col justify-between gap-3 shadow-sm";
                 
                 div.innerHTML = `
                     <div>
                         <div class="flex justify-between items-start gap-2">
                             <h3 class="font-bold text-slate-800 text-sm sm:text-base">${p.name}</h3>
-                            <span class="text-xs px-2 py-0.5 rounded-full font-bold ${p.taken ? 'bg-rose-100 text-rose-700' : 'bg-emerald-100 text-emerald-700'}">
-                                ${p.taken ? 'Indisponível' : 'Disponível'}
-                            </span>
+                            <span class="text-xs px-2 py-0.5 rounded-full font-bold bg-emerald-100 text-emerald-700">Disponível</span>
                         </div>
                     </div>
                     <div class="flex flex-col gap-2 pt-2">
                         <a href="${p.link}" target="_blank" class="text-center bg-indigo-50 hover:bg-indigo-100 text-indigo-700 font-semibold text-xs py-2 rounded-lg transition border border-indigo-200">
                             <i class="fa-solid fa-cart-shopping mr-1"></i> Ver no Mercado Livre
                         </a>
-                        ${!p.taken ? `
-                            <button onclick="openModal(${p.id})" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs py-2.5 rounded-lg transition shadow">
-                                Já comprei / Escolher Presente 🎁
-                            </button>
-                        ` : `
-                            <span class="text-center text-xs text-slate-500 font-medium italic">Presenteado por ${p.buyer.name}</span>
-                        `}
+                        <button onclick="openModal(${p.id})" class="w-full bg-amber-600 hover:bg-amber-700 text-white font-semibold text-xs py-2.5 rounded-lg transition shadow">
+                            Escolher este Presente 🎁
+                        </button>
                     </div>
                 `;
                 grid.appendChild(div);
@@ -141,15 +104,18 @@
         function openModal(id) {
             selectedProductId = id;
             const p = products.find(item => item.id === id);
-            document.getElementById('modalItemTitle').innerText = `Item selecionado: ${p.name}`;
-            document.getElementById('giftModal').classList.remove('hidden');
-            document.getElementById('giftModal').classList.add('flex');
+            if (p) {
+                document.getElementById('modalItemTitle').innerText = `Item selecionado: ${p.name}`;
+                document.getElementById('giftModal').classList.remove('hidden');
+                document.getElementById('giftModal').classList.add('flex');
+            }
         }
 
         function closeModal() {
             document.getElementById('giftModal').classList.remove('flex');
             document.getElementById('giftModal').classList.add('hidden');
             document.getElementById('giftForm').reset();
+            selectedProductId = null;
         }
 
         function submitGift(e) {
@@ -159,11 +125,9 @@
             const luckNumber = Math.floor(100 + Math.random() * 900);
 
             const p = products.find(item => item.id === selectedProductId);
-            p.taken = true;
-            p.buyer = { name, phone, luckNumber };
-            saveData();
+            if (!p) return;
+
             closeModal();
-            renderProducts();
 
             const meuWhatsApp = "5512992445149";
             const texto = `Olá! Me chamo *${name}* (Tel: ${phone}) e escolhi o presente *${p.name}* para ajudar no novo lar! Meu número da sorte para concorrer à Cesta de Café da Manhã é o *#${luckNumber}*.`;
@@ -177,51 +141,19 @@
                         #${luckNumber}
                     </div>
                     <h3 class="text-xl font-bold text-slate-800">Parabéns, ${name}!</h3>
-                    <p class="text-sm text-slate-600">O produto foi reservado da lista! O seu <strong>Número da Sorte</strong> para concorrer à Cesta de Café da Manhã é <strong>#${luckNumber}</strong>.</p>
+                    <p class="text-sm text-slate-600">O seu <strong>Número da Sorte</strong> para concorrer à Cesta de Café da Manhã é <strong>#${luckNumber}</strong>.</p>
+                    <p class="text-xs text-slate-500">Clique no botão abaixo para enviar a confirmação do seu presente diretamente para o nosso WhatsApp:</p>
                     <a href="${linkZap}" target="_blank" class="block w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-4 rounded-xl shadow-lg transition text-base">
                         <i class="fa-brands fa-whatsapp mr-2 text-lg"></i> Enviar Confirmação no WhatsApp
                     </a>
-                    <button onclick="this.closest('.fixed').remove(); location.reload();" class="text-xs text-slate-400 underline mt-2 block mx-auto">Fechar</button>
+                    <button onclick="this.closest('.fixed').remove();" class="text-xs text-slate-400 underline mt-2 block mx-auto cursor-pointer">Fechar</button>
                 </div>
             `;
             document.body.appendChild(modalSucesso);
         }
 
-        function openAdminLogin() {
-            document.getElementById('adminModal').classList.remove('hidden');
-            document.getElementById('adminModal').classList.add('flex');
-        }
-        function closeAdminModal() {
-            document.getElementById('adminModal').classList.remove('flex');
-            document.getElementById('adminModal').classList.add('hidden');
-        }
-        function verifyAdminPassword() {
-            if(document.getElementById('adminPasswordInput').value === 'junho2001') {
-                document.getElementById('adminLoginView').classList.add('hidden');
-                document.getElementById('adminDashboardView').classList.remove('hidden');
-                loadAdminGifts();
-            } else { alert("Senha incorreta!"); }
-        }
-        function loadAdminGifts() {
-            loadData();
-            const list = document.getElementById('admin-gifts-list');
-            list.innerHTML = '';
-            const taken = products.filter(p => p.taken);
-            if(taken.length === 0) { list.innerHTML = '<p class="text-xs text-slate-400 text-center py-4">Nenhum presente escolhido ainda.</p>'; return; }
-            taken.forEach(p => {
-                const div = document.createElement('div');
-                div.className = "p-3 bg-slate-50 border rounded-xl text-xs flex justify-between items-center";
-                div.innerHTML = `<div><strong>${p.name}</strong><br>Por: ${p.buyer.name} (${p.buyer.phone}) - <span class="text-amber-600 font-bold">Cupom: #${p.buyer.luckNumber}</span></div>
-                <button onclick="freeItem(${p.id})" class="bg-rose-100 text-rose-700 px-2 py-1 rounded font-bold">Liberar</button>`;
-                list.appendChild(div);
-            });
-        }
-        function freeItem(id) {
-            const p = products.find(item => item.id === id);
-            p.taken = false; p.buyer = null;
-            saveData(); loadAdminGifts(); renderProducts();
-        }
-        window.onload = loadData;
+        window.onload = renderProducts;
     </script>
 </body>
 </html>
+
